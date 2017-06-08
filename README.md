@@ -1,2 +1,2 @@
-# smart-contract
-Smart contract built in solidity to be deployed on MainNet
+# Solidity Smart Contract
+Smart contract built in solidity to be deployed on Ethereum MainNet

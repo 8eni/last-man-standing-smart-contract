@@ -1,5 +1,12 @@
 # MetaCoin Smart Contract
-AngulaJs front-end for truffle and testrpc
+AngularJs front-end for truffle and testrpc
+
+**Prerequisites** global
+	
+	- node/npm
+	- truffle
+	- testrpc
+
 
 **NPM** install dependencies
 	

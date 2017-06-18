@@ -1,5 +1,9 @@
-# Solidity Smart Contract
-Smart contract built in solidity to be deployed on Ethereum Blockchain
+# MetaCoin Smart Contract
+AngulaJs front-end for truffle and testrpc
+
+**NPM** install dependencies
+	
+	npm install
 
 **Compile** your contracts
 	
@@ -9,10 +13,10 @@ Smart contract built in solidity to be deployed on Ethereum Blockchain
 
 	truffle migrate
 
-*Interact* with contract via truffle console
+*Interact* with smart contract via truffle console
 
-    truffle console
-    var x = EscrowContract.deployed();
-	x.then((res) => { return res.address })
-	// returns the below (testrpc address)
-	'0xcd3e91bcd2f6ff6aeee0f388c61e5389d36e68cb'
+	MetaCoin.deployed().then((res)=>{
+		return res.getBalance.call(accounts[0])
+	}).then((balance)=>{
+		return(balance)
+	})

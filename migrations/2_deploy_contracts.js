@@ -1,5 +1,8 @@
-var EscrowContract = artifacts.require("./EscrowContract.sol");
+var ConvertLib = artifacts.require("./ConvertLib.sol");
+var MetaCoin = artifacts.require("./MetaCoin.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(EscrowContract);
+  deployer.deploy(ConvertLib);
+  deployer.link(ConvertLib, MetaCoin);
+  deployer.deploy(MetaCoin);
 };

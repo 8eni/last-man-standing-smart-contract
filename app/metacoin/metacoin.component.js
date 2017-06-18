@@ -16,8 +16,24 @@ let metacoinComponent = {
 		var contractAddress = '0xa8942503aa7e81869417b15bdd9ccc305d66f309';
 		var contract = web3.eth.contract(contractAbi).at(contractAddress); // Same as MetaCoin.deployed() in truffle console
 		
-		vm.address = contract._eth.accounts[0];
-		vm.balance = contract.getBalance.call(vm.address).toString(10)		
+		vm.addressOne = contract._eth.accounts[0];
+		vm.addressTwo = contract._eth.accounts[1];
+		vm.balanceInEth = contract.getBalanceInEth.call(vm.addressOne).toString(10)	
+		vm.balance = 0;	
+
+		// console.log(contract._eth.accounts)
+		vm.getBalance = (acc) => {
+			console.log(acc)
+			vm.balance = contract.getBalance.call(acc).toString(10)
+		}
+		vm.sendCoin = () => {
+			contract.sendCoin(vm.addressTwo, 10, {from: vm.addressOne})
+		}
+
+		// vm.sendCoin = (reciever, amount, sender) => {
+		// 	contract.sendCoin(reciever, amount, {from: sender})
+		// }
+
   
 	}
 

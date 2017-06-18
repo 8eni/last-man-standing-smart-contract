@@ -2,6 +2,11 @@
 
 <h1>{{vm.title}}</h1>
 
-<h4>Address <span ng-bind="vm.address"></span>: {{vm.balance}}</h4>
+<h4>Balance for <span ng-bind="vm.address"></span>: {{vm.balance}}</h4>
 
-<button ng-click='vm.getStorage()'>SEND INTEGER</button>
+<h3>text {{vm.addressCheck}}</h3>
+<input type="text" name="balance" ng-model="vm.addressCheck">
+<button ng-click='vm.getBalance(vm.addressCheck)'>GET BALANCE</button>
+
+
+<button ng-click='vm.sendCoin()'>SEND COIN</button>

@@ -7,4 +7,9 @@ angular
   .module('metacoin', [])
   .component('metacoin', component)
   .factory('metacoinService', service)
-  .config(routing);
+  .config(routing)
+  .filter('reverse', function() {
+	  return function(items) {
+	    return items.slice().reverse();
+	  };
+	});

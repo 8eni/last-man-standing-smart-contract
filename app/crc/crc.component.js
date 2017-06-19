@@ -1,16 +1,16 @@
-import metacoinHtml from './metacoin.html';
+import crcHtml from './crc.html';
 import Web3 from 'web3';
 import jquery from 'jquery';
 import bootstrap from 'bootstrap';
 import CreditStateControllerContract from '../../build/contracts/CreditStateController.json'
 
-let metacoinComponent = {
-	template: metacoinHtml,
+let crcComponent = {
+	template: crcHtml,
 	controllerAs: 'vm',
-	controller: function(metacoinService, $scope) {
+	controller: function(crcService, $scope) {
 		
 		const vm = this;
-		vm.title = metacoinService.title();
+		vm.title = crcService.title();
 		// Intiate Web3 instance
 		var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 		// Contract details
@@ -18,56 +18,39 @@ let metacoinComponent = {
 		var contractAddress = '0x4ac003c2a627766299a6ee93bea2b06373950885'; // CreditStateControllerContract.networks[0].address
 		var contract = web3.eth.contract(contractAbi).at(contractAddress); // Same as MetaCoin.deployed() in truffle console
 			
-		vm.addresses = contract._eth.accounts;
-		vm.addressOne = vm.addresses[0];
-		vm.addressTwo = vm.addresses[1];
-		vm.selectedAddress = vm.addresses[0];
+			// console.log('contract',CreditStateControllerContract.networks)
+		vm.addressOne = contract._eth.accounts[0];
+		vm.addressTwo = contract._eth.accounts[1];
 		// vm.balanceInEth = contract.getBalanceInEth.call(vm.addressOne).toString(10)	
 		vm.balance = 0;
 		vm.creditReportState = false; 
-		// console.log('TXNs',web3.eth.getTransaction('0xd84b3d913c4e6297a9c552c11b5cd39a7d3c3eee3e2e3ba6454866908c21fe98'))
-		// console.log('TXNs',web3.eth.getTransaction())
+		// console.log('TXNs',web3.eth.blockNumber)
+		// console.log('TXNs',web3.eth.getTransactionsByAccount(vm.addressOne))
 		
-		function getTransactionReceipt(arg) {
-			// var logs = [];
-			var receipt = web3.eth.getTransactionReceipt(arg);
-			// for (var i = receipt.logs.length - 1; i >= 0; i--) {
-			// 	logs.push(web3.toAscii(receipt.logs[i].data))
-			// }
-			return web3.toAscii(receipt.logs[0].data)
-
-			// console.log('logs',web3.toAscii(receipt.logs[0].data))
-		}
-
 		vm.transactions = [];
 		function pushTxn(obj, bool) {
 			var txnHash;
-			if (obj.hash) {
-				txnHash = obj;
-			} else {
-				txnHash = web3.eth.getTransaction(obj);
-				getTransactionReceipt(obj)
-			}
+			(obj.hash) ? txnHash = obj : txnHash = web3.eth.getTransaction(obj);
 			var txn = {
 				'hash': txnHash.hash,
 				'blockNumber': txnHash.blockNumber,
 				'from': txnHash.from,
 				'state': bool,
-				'gas': txnHash.gas,
-				'log': getTransactionReceipt(obj.hash)
+				'gas': txnHash.gas
 			}
 			vm.transactions.push(txn);
 		}
 		vm.freeze = () => {
-			contract.freeze(vm.addressOne, {from: vm.selectedAddress}, (err, res) => {
+			contract.freeze(vm.addressOne, {from: vm.addressOne}, (err, res) => {
 			  if (!err)
 			    pushTxn(res, true)
 				vm.creditReportState = contract.queryCurrentState.call(vm.addressOne).toString(10);
 				$scope.$apply()
 			});
 		}
+
 		vm.unFreeze = () => {
-			contract.unFreeze(vm.addressOne, {from: vm.selectedAddress}, (err, res) => {
+			contract.unFreeze(vm.addressOne, {from: vm.addressOne}, (err, res) => {
 			  if (!err)
 			    pushTxn(res, false)
 				vm.creditReportState = contract.queryCurrentState.call(vm.addressOne).toString(10);
@@ -95,10 +78,11 @@ let metacoinComponent = {
 		}
 		var firstPage = web3.eth.blockNumber - 10;
 		getTransactionsByAccount(vm.addressOne, firstPage, web3.eth.blockNumber);
+
   
 	}
 
 }
 
 
-export default metacoinComponent;
+export default crcComponent;

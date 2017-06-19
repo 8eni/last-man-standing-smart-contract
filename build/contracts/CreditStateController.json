@@ -1,0 +1,145 @@
+{
+  "contract_name": "CreditStateController",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "killContract",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "initiator",
+          "type": "address"
+        }
+      ],
+      "name": "unFreeze",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "initiator",
+          "type": "address"
+        }
+      ],
+      "name": "freeze",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "contractOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "initiator",
+          "type": "address"
+        }
+      ],
+      "name": "queryCurrentState",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "initiator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "isFrozen",
+          "type": "bool"
+        }
+      ],
+      "name": "LogCreditState",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "description",
+          "type": "string"
+        }
+      ],
+      "name": "LogEvent",
+      "type": "event"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000c57fe5b5b6040805160208082526015908201527f496e766f6b696e672074686520636f6e747261637400000000000000000000008183015290517f0f9302c81771c0eee3c21199d1d5510ce78a68962d32a182bd71b8fb22a9ff1d9181900360600190a160008054600160a060020a03191633600160a060020a03161790555b5b610371806100996000396000f300606060405263ffffffff60e060020a6000350416631c02708d811461004d57806383cfab421461005f5780638d1fdf2f1461007d578063ce606ee01461009b578063f247f7f5146100c7575bfe5b341561005557fe5b61005d6100f7565b005b341561006757fe5b61005d600160a060020a036004351661016b565b005b341561008557fe5b61005d600160a060020a036004351661021c565b005b34156100a357fe5b6100ab6102d4565b60408051600160a060020a039092168252519081900360200190f35b34156100cf57fe5b6100e3600160a060020a03600435166102e3565b604080519115158252519081900360200190f35b60005433600160a060020a039081169116146101135760006000fd5b604080516020808252601490820152606260020a7312da5b1b1a5b99c81d1a194818dbdb9d1c9858dd028183015290516000805160206103068339815191529181900360600190a1600054600160a060020a0316ff5b565b604080516020808252602a908201527f556e2d667265657a696e672074686520636f6e747261637420666f72207468658183015260b160020a691034b734ba34b0ba37b902606082015290516000805160206103068339815191529181900360800190a1600160a060020a0381166000818152600160209081526040808320805460ff1916905580519384529083019190915280516000805160206103268339815191529281900390910190a15b50565b6040805160208082526027908201527f467265657a696e672074686520636f6e747261637420666f722074686520696e8183015260c960020a6634ba34b0ba37b902606082015290516000805160206103068339815191529181900360800190a1600160a060020a038116600081815260016020818152604092839020805460ff191690921791829055825193845260ff90911615159083015280516000805160206103268339815191529281900390910190a15b50565b600054600160a060020a031681565b600160a060020a03811660009081526001602052604090205460ff165b91905056000f9302c81771c0eee3c21199d1d5510ce78a68962d32a182bd71b8fb22a9ff1dff34abc9afecad98e89cbfa6241af84a6ef226b11e140b5f3ec2be6291893ec7a165627a7a72305820d6a0060e61416309138d4724ea9e3d7587e27bb2794648cc5dcb0b3565b2d5af0029",
+  "networks": {
+    "1497872939859": {
+      "events": {
+        "0xff34abc9afecad98e89cbfa6241af84a6ef226b11e140b5f3ec2be6291893ec7": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "initiator",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "isFrozen",
+              "type": "bool"
+            }
+          ],
+          "name": "LogCreditState",
+          "type": "event"
+        },
+        "0x0f9302c81771c0eee3c21199d1d5510ce78a68962d32a182bd71b8fb22a9ff1d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "description",
+              "type": "string"
+            }
+          ],
+          "name": "LogEvent",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x4ac003c2a627766299a6ee93bea2b06373950885",
+      "updated_at": 1497872945686
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1497872945686
+}

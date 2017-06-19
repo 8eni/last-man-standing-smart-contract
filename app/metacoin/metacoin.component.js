@@ -27,13 +27,12 @@ let metacoinComponent = {
 			vm.balance = contract.getBalance.call(acc).toString(10)
 		}
 		vm.sendCoin = () => {
-			contract.sendCoin(vm.addressTwo, 10, {from: vm.addressOne})
+			contract.sendCoin(vm.addressTwo, 10, {from: vm.addressOne}, (err, hash) => {
+			  if (!err)
+			    console.log('TXN',hash);
+				console.log(web3.eth.getTransaction(hash))
+			});
 		}
-
-		// vm.sendCoin = (reciever, amount, sender) => {
-		// 	contract.sendCoin(reciever, amount, {from: sender})
-		// }
-
   
 	}
 

@@ -41,20 +41,23 @@ let metacoinComponent = {
 
 		vm.transactions = [];
 		function pushTxn(obj, bool) {
+			var txnObject;
 			var txnHash;
 			if (obj.hash) {
-				txnHash = obj;
+				txnHash = obj.hash;
+				txnObject = obj;
 			} else {
-				txnHash = web3.eth.getTransaction(obj);
+				txnHash = obj;
+				txnObject = web3.eth.getTransaction(obj);
 				getTransactionReceipt(obj)
 			}
 			var txn = {
-				'hash': txnHash.hash,
-				'blockNumber': txnHash.blockNumber,
-				'from': txnHash.from,
+				'hash': txnObject.hash,
+				'blockNumber': txnObject.blockNumber,
+				'from': txnObject.from,
 				'state': bool,
-				'gas': txnHash.gas,
-				'log': getTransactionReceipt(obj.hash)
+				'gas': txnObject.gas,
+				'log': getTransactionReceipt(txnHash)
 			}
 			vm.transactions.push(txn);
 		}

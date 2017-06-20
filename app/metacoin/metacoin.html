@@ -63,9 +63,9 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Credit Report -  
-          <b ng-if="vm.creditReportState != 'true'">Unlocked</b>
-          <b ng-if="vm.creditReportState == 'true'">Locked</b>
+          <h1 class="page-header">Security Freeze -  
+          <b ng-if="vm.creditReportState != 'true'">Unactive</b>
+          <b ng-if="vm.creditReportState == 'true'">Active</b>
           <span class="state {{vm.creditReportState}}">
           	<i ng-if="vm.creditReportState != 'true'" class="fa fa-unlock-alt" aria-hidden="true"></i>
             <i ng-if="vm.creditReportState == 'true'" class="fa fa-lock" aria-hidden="true"></i>
@@ -96,42 +96,51 @@
           </div> -->
 
           
-          <div class="table-responsive col-md-6">
+          <div class="table-responsive col-md-7">
           <h2 class="sub-header">Ledger</h2>
             <table class="table table-striped">
               <thead>
                 <tr>
                   <th>Block</th>
-                  <th>TXN</th>
-                  <th>State</th>
-                  <th>Gas</th>
-                  <th>Log</th>
+                  <!-- <th>TXN</th> -->
+                  <!-- <th>Address</th> -->
+                  <th>Freeze</th>
+                  <th>Timestamp</th>
+                  <th>Duration</th>
+                  <th>Message</th>
                   <!-- <th>Header</th> -->
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="txn in vm.transactions | reverse">
                   <td><b>#</b>{{txn.blockNumber}}</td>
-                  <td><span class="hash" data-toggle="tooltip" title="{{txn.hash}}">{{txn.hash}}</span></td>
-                  <td>{{txn.state}}</td>
-                  <td>{{txn.gas}}</td>
-                  <td>{{txn.log}}</td>
+                  <!-- <td><span class="hash" data-toggle="tooltip" title="{{txn.hash}}">{{txn.hash}}</span></td> -->
+                  <!-- <td>{{txn.address}}</td> -->
+                  <td>{{txn.bool}}</td>
+                  <td>{{txn.timestamp}}</td>
+                  <td>{{txn.duration}}</td>
+                  <td>{{txn.message}}</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
           
-          <div class="table-responsive col-md-6">
+          <div class="table-responsive col-md-5">
           <h2 class="sub-header">State submission</h2>
             <form>
-			  <div class="form-group">
+        <div class="form-group" ng-if="vm.creditReportState == 'true'">
+          <label for="time">Security freeze duration</label>
+          <select class="form-control" ng-model="vm.selectedDay" ng-options="x for x in vm.days">
+          </select>
+        </div>
+        <div class="form-group">
 			    <label for="reason">Reason</label>
 			    <input type="text" class="form-control" id="reason" placeholder="Reason for release/freeze">
 			  </div>
 			  <div class="form-group">
-			    <label for="recipient">Recipient</label>
-			    <input type="text" class="form-control" id="recipient" placeholder="Recipient">
+			    <label for="recipient">Creditor</label>
+			    <input type="text" class="form-control" id="recipient" placeholder="Creditor">
 			  </div>
 			  <button ng-if="vm.creditReportState != 'true'" ng-click="vm.freeze()" class="btn btn-primary">Lock</button>
 			  <button ng-if="vm.creditReportState == 'true'" ng-click="vm.unFreeze()" class="btn btn-default">Unlock</button>

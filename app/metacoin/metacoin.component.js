@@ -15,7 +15,7 @@ let metacoinComponent = {
 		var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 		// Contract details
 		var contractAbi = CreditStateControllerContract.abi;
-		var contractAddress = '0x43b06360cfb31d3a74361319037d686d8ada62f7'; // CreditStateControllerContract.networks[0].address
+		var contractAddress = '0xeab1e277ffb7a41a65996f5a3666e8418b2e7607'; // CreditStateControllerContract.networks[0].address
 		var contract = web3.eth.contract(contractAbi).at(contractAddress); // Same as MetaCoin.deployed() in truffle console
 			
 			// console.log('contract',contract)
@@ -41,8 +41,8 @@ let metacoinComponent = {
 				vm.creditReportState = 'false';
 			}
 		}
-		// getCurrentState();
-		console.log('vm.creditReportState',vm.creditReportState)
+		getCurrentState();
+		// console.log('vm.creditReportState',vm.creditReportState)
 		vm.addresses = contract._eth.accounts;
 		vm.addressOne = vm.addresses[0];
 		vm.addressTwo = vm.addresses[1];
@@ -51,28 +51,30 @@ let metacoinComponent = {
 		vm.duration = 86400;
 		
 		function getTransactionReceipt(arg) { // TXN hash passed as param
-			// console.log('TXN',arg)
+			// console.log('TXN arg',arg)
 			var logs = [];
 			var receipt = web3.eth.getTransactionReceipt(arg);
-			// console.log('receipt',receipt)
+			console.log('receipt',receipt)
 			for (var i = 0; i < receipt.logs.length; i++) {
 				// console.log(receipt.logs.length)
-				if (i == 0) { // Address
+				if (i == 0) { // Message
 					logs.push(web3.toAscii(receipt.logs[i].data))
-				} else if (i == 1) { // Duration
+				} else if (i == 1) { // Address
 					logs.push(web3.toDecimal(receipt.logs[i].data))
-				} else if (i == 2) { // Duration
+				} else if (i == 2) { // Bool
 					(web3.toDecimal(receipt.logs[i].data) == 1) ? logs.push(true) : logs.push(false) 
-				} else if (i == 3) { // Duration
+				} else if (i == 3) { // Timestamp
 					logs.push(secondsConverter(web3.toDecimal(receipt.logs[i].data)))
-				} else if (i == 4) { // Duration
+				} else if (i == 4) { // Creditor
+					logs.push(web3.toAscii(receipt.logs[i].data))
+				} else if (i == 5) { // Duration
 					logs.push(secondsToHms(web3.toDecimal(receipt.logs[i].data)))
-				} else {
-					logs.push(web3.toDecimal(receipt.logs[i].data))
+				} else if (i == 6) { // Reason
+					logs.push(web3.toAscii(receipt.logs[i].data))
 				}
 
 			}
-			console.log('logs',logs)
+			// console.log('logs',logs)
 			return logs
 		}
 		function secondsToHms(d) {
@@ -101,8 +103,10 @@ let metacoinComponent = {
 				txnObject = web3.eth.getTransaction(obj);
 				getTransactionReceipt(obj)
 			}
-			// console.log('txnObject',txnObject)
+			
+
 			var txnAdd = getTransactionReceipt(txnHash);
+			console.log('txnAdd',txnAdd)
 			var txn = {
 				'hash': txnObject.hash,
 				'blockNumber': txnObject.blockNumber,
@@ -110,11 +114,12 @@ let metacoinComponent = {
 				'address': 'NA', //txnAdd[1]
 				'bool': txnAdd[2],
 				'timestamp': txnAdd[3],
-				'duration': txnAdd[4],
-				'message': txnAdd[0]
+				'duration': txnAdd[5],
+				'creditor': txnAdd[4],
+				'message': txnAdd[6]
 			}
+			// console.log('txn',txn)
 			vm.transactions.push(txn);
-			// console.log('vm.transactions',vm.transactions)
 
 
 		}
@@ -130,9 +135,11 @@ let metacoinComponent = {
 				$scope.$apply()
 			});
 		}
+		vm.creditor = "AIB"
+		vm.reason = "Unknown reason"
 		vm.unFreeze = () => {
-			contract.unFreeze(vm.addressOne, "AIB", getSeconds(vm.selectedDay), "Unknown reason", {from: vm.selectedAddress, gas: 400000}, (err, res) => {
-			  console.log('err', err)
+			contract.unFreeze(vm.addressOne, vm.creditor, getSeconds(vm.selectedDay), vm.reason, {from: vm.selectedAddress, gas: 400000}, (err, res) => {
+			  console.log('res', res)
 			  if (!err)
 			    pushTxn(res)
 				// vm.creditReportState = contract.queryCurrentState.call(vm.addressOne).toString(10);

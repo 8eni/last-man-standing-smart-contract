@@ -67,19 +67,22 @@ contract CreditStateController {
     creditStateMap[initiator].reasonForUnfreeze.push(reason);
     
                LogUserAddress(initiator);
-               logElectedCreditor(creditStateMap[initiator].electedCreditors[creditorIndex]);
                LogCreditState(false);
                LogCreditFreezeTime(creditStateMap[initiator].unfreezeTimings[creditorIndex]);
+               logElectedCreditor(creditStateMap[initiator].electedCreditors[creditorIndex]);
                LogCreditFreezeDuration(creditStateMap[initiator].unfreezeDuration[creditorIndex]);
                logReasonForUnfreeze(creditStateMap[initiator].reasonForUnfreeze[creditorIndex]);
  
     }
  
    function recordCreditFreezeAndLogEvent(address initiator) private {
+    
     for(uint j=0; j < creditStateMap[initiator].electedCreditors.length ; j++){
         delete creditStateMap[initiator];
     }
     LogUserAddress(initiator);
+    LogCreditState(true);
+    LogCreditFreezeTime(now);
   }
   
   function killContract()  {

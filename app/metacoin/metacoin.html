@@ -103,10 +103,11 @@
                 <tr>
                   <th>Block</th>
                   <!-- <th>TXN</th> -->
-                  <!-- <th>Address</th> -->
+                  <th>Address</th>
                   <th>Freeze</th>
                   <th>Timestamp</th>
                   <th>Duration</th>
+                  <th>Creditor</th>
                   <th>Message</th>
                   <!-- <th>Header</th> -->
                 </tr>
@@ -115,10 +116,11 @@
                 <tr ng-repeat="txn in vm.transactions | reverse">
                   <td><b>#</b>{{txn.blockNumber}}</td>
                   <!-- <td><span class="hash" data-toggle="tooltip" title="{{txn.hash}}">{{txn.hash}}</span></td> -->
-                  <!-- <td>{{txn.address}}</td> -->
+                  <td><span class="hash">{{txn.from}}</span></td>
                   <td>{{txn.bool}}</td>
                   <td>{{txn.timestamp}}</td>
                   <td>{{txn.duration}}</td>
+                  <td>{{txn.creditor}}</td>
                   <td>{{txn.message}}</td>
                 </tr>
               </tbody>
@@ -134,14 +136,14 @@
           <select class="form-control" ng-model="vm.selectedDay" ng-options="x for x in vm.days">
           </select>
         </div>
-        <div class="form-group">
-			    <label for="reason">Reason</label>
-			    <input type="text" class="form-control" id="reason" placeholder="Reason for release/freeze">
-			  </div>
 			  <div class="form-group">
 			    <label for="recipient">Creditor</label>
-			    <input type="text" class="form-control" id="recipient" placeholder="Creditor">
+			    <input ng-model="vm.creditor" type="text" class="form-control" id="recipient" placeholder="Creditor">
 			  </div>
+        <div class="form-group">
+          <label for="reason">Reason</label>
+          <input ng-model="vm.reason" type="text" class="form-control" id="reason" placeholder="Reason for release/freeze">
+        </div>
 			  <button ng-if="vm.creditReportState != 'true'" ng-click="vm.freeze()" class="btn btn-primary">Lock</button>
 			  <button ng-if="vm.creditReportState == 'true'" ng-click="vm.unFreeze()" class="btn btn-default">Unlock</button>
 			</form>

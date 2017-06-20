@@ -94,21 +94,30 @@
             <table class="table table-striped">
               <thead>
                 <tr>
+                  <th>Avatar</th>
                   <th>Block</th>
-                  <th>TXN</th>
-                  <th>Public Key</th>
-                  <th>State</th>
-                  <th>Gas</th>
+                  <!-- <th>TXN</th> -->
+                  <th>Address</th>
+                  <th>Freeze</th>
+                  <th>Timestamp</th>
+                  <th>Duration</th>
+                  <th>Creditor</th>
+                  <th>Message</th>
                   <!-- <th>Header</th> -->
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="txn in vm.transactions | reverse">
+
+                  <td><span class="avatar"><img src="{{vm.profileImg($index)}}"></span></td>
                   <td><b>#</b>{{txn.blockNumber}}</td>
-                  <td><span class="hash" data-toggle="tooltip" title="{{txn.hash}}">{{txn.hash}}</span></td>
-                  <td>{{txn.from}}</td>
-                  <td>{{txn.state}}</td>
-                  <td>{{txn.gas}}</td>
+                  <!-- <td><span class="hash" data-toggle="tooltip" title="{{txn.hash}}">{{txn.hash}}</span></td> -->
+                  <td><span class="hash">{{txn.from}}</span></td>
+                  <td>{{txn.bool}}</td>
+                  <td>{{txn.timestamp}}</td>
+                  <td>{{txn.duration}}</td>
+                  <td>{{txn.creditor}}</td>
+                  <td>{{txn.message}}</td>
                 </tr>
               </tbody>
             </table>

@@ -15,6 +15,7 @@ let metacoinComponent = {
 		var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 		// Contract details
 		var contractAbi = CreditStateControllerContract.abi;
+		console.log(CreditStateControllerContract)
 		var contractAddress = '0xeab1e277ffb7a41a65996f5a3666e8418b2e7607'; // CreditStateControllerContract.networks[0].address
 		var contract = web3.eth.contract(contractAbi).at(contractAddress); // Same as MetaCoin.deployed() in truffle console
 			
@@ -30,6 +31,7 @@ let metacoinComponent = {
 				return 259200
 			}
 		}
+
 
 		// Retrieve last transaction state
 		function getCurrentState() {
@@ -54,7 +56,7 @@ let metacoinComponent = {
 			// console.log('TXN arg',arg)
 			var logs = [];
 			var receipt = web3.eth.getTransactionReceipt(arg);
-			console.log('receipt',receipt)
+			// console.log('receipt',receipt)
 			for (var i = 0; i < receipt.logs.length; i++) {
 				// console.log(receipt.logs.length)
 				if (i == 0) { // Message
@@ -72,7 +74,6 @@ let metacoinComponent = {
 				} else if (i == 6) { // Reason
 					logs.push(web3.toAscii(receipt.logs[i].data))
 				}
-
 			}
 			// console.log('logs',logs)
 			return logs
@@ -106,7 +107,7 @@ let metacoinComponent = {
 			
 
 			var txnAdd = getTransactionReceipt(txnHash);
-			console.log('txnAdd',txnAdd)
+			// console.log('txnAdd',txnAdd)
 			var txn = {
 				'hash': txnObject.hash,
 				'blockNumber': txnObject.blockNumber,
@@ -136,7 +137,7 @@ let metacoinComponent = {
 			});
 		}
 		vm.creditor = "AIB"
-		vm.reason = "Unknown reason"
+		vm.reason = "Discosed"
 		vm.unFreeze = () => {
 			contract.unFreeze(vm.addressOne, vm.creditor, getSeconds(vm.selectedDay), vm.reason, {from: vm.selectedAddress, gas: 400000}, (err, res) => {
 			  console.log('res', res)

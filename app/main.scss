@@ -1,6 +1,17 @@
 /*
  * Base structure
  */
+.avatar {
+    overflow: hidden;
+    width: 24px;
+    height: 24px;
+    border-radius: 24px;
+    display: block;
+    border: solid #ddd 1px;
+}
+.avatar>img{
+  width: 100%;
+}
 .hash {
   width: 100px;
   white-space: nowrap;

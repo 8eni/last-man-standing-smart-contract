@@ -1687,8 +1687,99 @@
       "links": {},
       "address": "0xeab1e277ffb7a41a65996f5a3666e8418b2e7607",
       "updated_at": 1497981355323
+    },
+    "1498045786794": {
+      "events": {
+        "0xd034108a3b534c21687f9583dacbeec620539bf75be02447499b19b76be2a65a": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "initiator",
+              "type": "address"
+            }
+          ],
+          "name": "LogUserAddress",
+          "type": "event"
+        },
+        "0x89cbf398629f745826bd56aa1eb8c8b6f4781e253ca7b937e2b11d8a74da404f": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "isFrozen",
+              "type": "bool"
+            }
+          ],
+          "name": "LogCreditState",
+          "type": "event"
+        },
+        "0xe3c83c50411ad9273fc0bbbaa327044db89183c71537e6264ff8aea13cf5a04b": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "freezeTime",
+              "type": "uint256"
+            }
+          ],
+          "name": "LogCreditFreezeTime",
+          "type": "event"
+        },
+        "0xe04138fce22f51a7ec9c7f328d4fa7597fc3d316bf2316de258f326e74b84eca": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "freezeDuration",
+              "type": "uint256"
+            }
+          ],
+          "name": "LogCreditFreezeDuration",
+          "type": "event"
+        },
+        "0x0f9302c81771c0eee3c21199d1d5510ce78a68962d32a182bd71b8fb22a9ff1d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "description",
+              "type": "string"
+            }
+          ],
+          "name": "LogEvent",
+          "type": "event"
+        },
+        "0x6469f454c4f603f0d57677160fe77fd465a00e8e6afe91e2ab7b0ad4a134f46b": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "electedCreditor",
+              "type": "string"
+            }
+          ],
+          "name": "logElectedCreditor",
+          "type": "event"
+        },
+        "0xba9b9dbbfa178d4ffd7ed324ec622f46ec1a331c4c66946a1910d3118e30daeb": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "reason",
+              "type": "string"
+            }
+          ],
+          "name": "logReasonForUnfreeze",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x357364d5896a8d3b38ce2d0f7f20749d1f1c5f24",
+      "updated_at": 1498045876919
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1497981355323
+  "updated_at": 1498045876919
 }

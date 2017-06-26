@@ -87,7 +87,7 @@ contract LastManStanding {
             }
             logAdvance(entityStructs[entityList[i]].entityTeamName, entityStructs[entityList[i]].isEntityNextRound);
         }
-        checkForWinner();
+        checkForWinner(usersLeft);
         logUint(gameWeek);
         return true;
     }
@@ -101,9 +101,16 @@ contract LastManStanding {
         return true;
     }
     
-    function checkForWinner() constant returns (bool weHaveAWinner){
-        if(usersLeft != 1) throw;
-        logString("We have a winner");
+    function checkForWinner(uint _usersLeft) constant returns (bool weHaveAWinner){
+        if(_usersLeft != 1 || _usersLeft != 0) throw;
+        if(usersLeft == 1) {
+            // Contract pays out
+            logString("We have a winner");    
+        } else {
+            // Pass array of loosers for replay of round
+            logString("DRAW, replay with all loosers in this round");
+        }
+        
         return true;
     }
     

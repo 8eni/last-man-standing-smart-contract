@@ -109,6 +109,10 @@ contract LastManStanding {
         } else {
             // Pass array of loosers for replay of round
             logString("DRAW, replay with all loosers in this round");
+            for (uint8 i = 0; i < entityList.length; i++) { // Roll over addresses
+                entityStructs[entityList[i]].isEntityNextRound = true;
+                entityStructs[entityList[i]].entityGameWeek = gameWeek;
+            }
         }
         
         return true;

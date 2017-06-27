@@ -51,9 +51,9 @@ contract LastManStanding {
     uint usersLeft;
     
     event logString(string);
-    event logUint(uint);
-    event logBool(bool);
-    event logAdvance(string, bool);
+    event logUint(string, uint);
+    event logBool(string, bool);
+
     
     function isEntity(address entityAddress) public constant returns(bool isIndeed) {
       return entityStructs[entityAddress].entityEntered;
@@ -66,6 +66,7 @@ contract LastManStanding {
     function newEntry(string entityTeamName, uint entityTeamId) public returns(uint rowNumber) {
         entityAddress = msg.sender;
         if(isEntity(entityAddress)) throw;
+        if(gameWeek != 1) throw;
         entityStructs[entityAddress].entityTeamId = entityTeamId;
         entityStructs[entityAddress].entityTeamName = entityTeamName;
         entityStructs[entityAddress].isEntityNextRound = false;
@@ -85,10 +86,10 @@ contract LastManStanding {
                     usersLeft++;
                 }
             }
-            logAdvance(entityStructs[entityList[i]].entityTeamName, entityStructs[entityList[i]].isEntityNextRound);
+            // logAdvance(entityStructs[entityList[i]].entityTeamName, entityStructs[entityList[i]].isEntityNextRound);
         }
         checkForWinner(usersLeft);
-        logUint(gameWeek);
+        logUint("Gameweek set to ", gameWeek);
         return true;
     }
     
@@ -102,19 +103,16 @@ contract LastManStanding {
     }
     
     function checkForWinner(uint _usersLeft) constant returns (bool weHaveAWinner){
-        if(_usersLeft != 1 || _usersLeft != 0) throw;
-        if(usersLeft == 1) {
-            // Contract pays out
-            logString("We have a winner");    
+        if(_usersLeft > 1) throw;
+        if(_usersLeft == 1) {
+            logUint("We have a winner", _usersLeft);
         } else {
-            // Pass array of loosers for replay of round
-            logString("DRAW, replay with all loosers in this round");
+            logUint("DRAW", _usersLeft);
             for (uint8 i = 0; i < entityList.length; i++) { // Roll over addresses
                 entityStructs[entityList[i]].isEntityNextRound = true;
                 entityStructs[entityList[i]].entityGameWeek = gameWeek;
             }
         }
-        
         return true;
     }
     

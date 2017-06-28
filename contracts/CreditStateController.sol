@@ -1,119 +1,143 @@
-pragma solidity 0.4.11;
- 
-contract CreditStateController {
- 
-  address public contractOwner;
-  mapping (address => creditFreezeTimeLimit) creditStateMap;
- 
-  struct creditFreezeTimeLimit {
-                              string[] electedCreditors;
-                              uint[] unfreezeTimings;
-                              uint[] unfreezeDuration;
-                              string[] reasonForUnfreeze;
-  }
- 
-  
-  event LogUserAddress(address initiator);
-  event LogCreditState(bool isFrozen);
-  event LogCreditFreezeTime(uint freezeTime);
-  event LogCreditFreezeDuration(uint freezeDuration);
-  event LogEvent(string description);
-  event logElectedCreditor(string electedCreditor);
-  event logReasonForUnfreeze(string reason);
- 
-  function CreditStateController(){
-    LogEvent("Invoking the contract");
-    contractOwner = msg.sender;
-  }
- 
-  function unFreeze(address initiator, string creditor, uint freezeLimitTime,
-                        string reason) {
-                           
-    LogEvent("Un-freezing the contract for the initiator");
-    recordCreditUnFreezeAndLogEvent(initiator, creditor, freezeLimitTime, reason);
-  }
- 
-  function unFreeze(address initiator, string creditor, string reason) {
-    LogEvent("Un-freezing the contract for the initiator");
-    recordCreditUnFreezeAndLogEvent(initiator, creditor, 172800, reason);
-  }
- 
-  function freeze(address initiator){
-               LogEvent("Freezing the contract for the initiator");
-               recordCreditFreezeAndLogEvent(initiator);
-  }
- 
-  
-  
-  function recordCreditUnFreezeAndLogEvent(address initiator, string creditor,
-                    uint freezeLimitTime, string reason) private {
-                       
-    bool creditorInUnfreeze =  false;
-    uint creditorIndex = 0;
-   
-    if(creditStateMap[initiator].electedCreditors.length > 0) {
-               for(uint i=0; i < creditStateMap[initiator].electedCreditors.length; i++ ) {
-                   if(equal(creditStateMap[initiator].electedCreditors[i],creditor)) {
-                       creditorInUnfreeze = true;
-                       creditorIndex = i;
-                       break;
-                   }
-               }
-    }
-              
-               creditStateMap[initiator].electedCreditors.push(creditor);
-    creditStateMap[initiator].unfreezeTimings.push(now);
-    creditStateMap[initiator].unfreezeDuration.push(freezeLimitTime);
-    creditStateMap[initiator].reasonForUnfreeze.push(reason);
+pragma solidity ^0.4.11;
+
+// Id: 1  AFC Bournemouth
+// Id: 2  Arsenal
+// Id: 3  Brighton & Hove Albion
+// Id: 4  Burnley
+// Id: 5  Chelsea
+// Id: 6  Crystal Palace
+// Id: 7  Everton
+// Id: 8  Huddersfield Town
+// Id: 9  Leicester City
+// Id: 10 Liverpool
+// Id: 11 Manchester City
+// Id: 12 Manchester United
+// Id: 13 Newcastle United
+// Id: 14 Southampton
+// Id: 15 Stoke City
+// Id: 16 Swansea City
+// Id: 17 Tottenham Hotspur
+// Id: 18 Watford
+// Id: 19 West Bromwich Albion
+// Id: 20 West Ham United
+
+contract LastManStanding {
     
-               LogUserAddress(initiator);
-               LogCreditState(false);
-               LogCreditFreezeTime(creditStateMap[initiator].unfreezeTimings[creditorIndex]);
-               logElectedCreditor(creditStateMap[initiator].electedCreditors[creditorIndex]);
-               LogCreditFreezeDuration(creditStateMap[initiator].unfreezeDuration[creditorIndex]);
-               logReasonForUnfreeze(creditStateMap[initiator].reasonForUnfreeze[creditorIndex]);
- 
+    address chairperson;
+    uint gameWeek;
+    uint amount;
+    address winner;
+
+    function LastManStanding() {
+        chairperson = msg.sender;
+        gameWeek = 1;
     }
- 
-   function recordCreditFreezeAndLogEvent(address initiator) private {
     
-    for(uint j=0; j < creditStateMap[initiator].electedCreditors.length ; j++){
-        delete creditStateMap[initiator];
+    modifier chairPerson() {
+        if (chairperson != msg.sender) return;
+        _;
     }
-    LogUserAddress(initiator);
-    LogCreditState(true);
-    LogCreditFreezeTime(now);
-  }
-  
-  function killContract()  {
-    if(msg.sender != contractOwner) throw;
-    LogEvent("Killing the contract");
-   
-    selfdestruct(contractOwner);
-  }
- 
-  function compare(string _a, string _b) returns (int) {
-        bytes memory a = bytes(_a);
-        bytes memory b = bytes(_b);
-        uint minLength = a.length;
-        if (b.length < minLength) minLength = b.length;
-        //@todo unroll the loop into increments of 32 and do full 32 byte comparisons
-        for (uint i = 0; i < minLength; i ++)
-            if (a[i] < b[i])
-                return -1;
-            else if (a[i] > b[i])
-                return 1;
-        if (a.length < b.length)
-            return -1;
-        else if (a.length > b.length)
-            return 1;
-        else
-            return 0;
+
+    struct EntityStruct {
+        uint entityTeamId;
+        uint entityGameWeek;
+        string entityTeamName; // Change to bytes32
+        bool isEntityNextRound; // true(After submission) : false(after newEntity || advanceUsersToNextRound)
+        bool entityEntered;
+        uint entityAmount;
     }
-   
-    /// @dev Compares two strings and returns true iff they are equal.
-  function equal(string _a, string _b) returns (bool) {
-        return compare(_a, _b) == 0;
-  }
- 
+    
+    mapping(address => EntityStruct) public entityStructs;
+    address[] public entityList;
+    uint[] public winners;
+    address entityAddress;
+    uint usersLeft;
+    
+    event logString(string);
+    event logUint(string, uint);
+    event logBool(string, bool);
+
+    
+    function isEntity(address entityAddress) public constant returns(bool isIndeed) {
+      return entityStructs[entityAddress].entityEntered;
+    }
+    
+    function getUserCount() public constant returns(uint entityCount) {
+        return entityList.length;
+    }
+    
+    function newEntry(string entityTeamName, uint entityTeamId) payable public returns (uint rowNumber){
+        entityAddress = msg.sender;
+        if(isEntity(entityAddress)) throw;
+        if(gameWeek != 1) throw;
+        entityStructs[entityAddress].entityTeamId = entityTeamId;
+        entityStructs[entityAddress].entityTeamName = entityTeamName;
+        entityStructs[entityAddress].isEntityNextRound = false;
+        entityStructs[entityAddress].entityEntered = true;
+        entityStructs[entityAddress].entityAmount = msg.value;
+        amount += entityStructs[entityAddress].entityAmount; 
+        return entityList.push(entityAddress) - 1;
+    }
+    
+    function advanceUsersToNextRound(uint[] _winners) chairPerson public returns(bool success) {
+        winners = _winners;
+        gameWeek++;
+        usersLeft = 0;
+        for (uint8 i = 0; i < entityList.length; i++) { // Roll over addresses
+            for (uint8 j = 0; j < winners.length; j++) { // Roll over winner Ids
+                if (entityStructs[entityList[i]].entityTeamId == winners[j]) {
+                    entityStructs[entityList[i]].isEntityNextRound = true;
+                    entityStructs[entityList[i]].entityGameWeek = gameWeek;
+                    usersLeft++;
+                }
+            }
+            // logAdvance(entityStructs[entityList[i]].entityTeamName, entityStructs[entityList[i]].isEntityNextRound);
+        }
+        checkForWinner(usersLeft);
+        logUint("Gameweek set to ", gameWeek);
+        return true;
+    }
+    
+    function nextUserEntry(string entityTeamName, uint entityTeamId) public returns (bool nextEntryReceived) {
+        entityAddress = msg.sender;
+        if(entityStructs[entityAddress].entityGameWeek != gameWeek && entityStructs[entityAddress].isEntityNextRound != true) throw;
+        entityStructs[entityAddress].entityTeamId = entityTeamId;
+        entityStructs[entityAddress].entityTeamName = entityTeamName;
+        entityStructs[entityAddress].isEntityNextRound = false;
+        return true;
+    }
+    
+    function checkForWinner(uint _usersLeft) constant returns (bool weHaveAWinner){
+        if(_usersLeft > 1) throw;
+        if(_usersLeft == 1) {
+            logUint("We have a winner", _usersLeft);
+            winner = entityList[0];
+        } else {
+            logUint("DRAW", _usersLeft);
+            for (uint8 i = 0; i < entityList.length; i++) { // Roll over addresses
+                entityStructs[entityList[i]].isEntityNextRound = true;
+                entityStructs[entityList[i]].entityGameWeek = gameWeek;
+            }
+        }
+        return true;
+    }
+    
+    function getUser(address _address) public constant returns(uint, string, bool, bool, uint, uint) {
+        return (entityStructs[_address].entityTeamId,entityStructs[_address].entityTeamName,entityStructs[_address].isEntityNextRound,entityStructs[_address].entityEntered,entityStructs[_address].entityGameWeek,entityStructs[_address].entityAmount);
+    }
+    
+    function getAmount() public constant returns (uint pot) {
+        return amount;
+    }
+    
+    function sendPotToWinner() public returns (uint totalPot){  
+        if (winner != msg.sender) throw;
+      winner.transfer(amount);
+      return amount;
+    }
+    
+    function winnerBalance() constant returns (uint winningPot) {
+        return winner.balance;
+    }
+
 }

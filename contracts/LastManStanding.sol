@@ -25,6 +25,7 @@ contract LastManStanding {
     
     address chairperson;
     uint gameWeek;
+    uint amount;
 
     function LastManStanding() {
         chairperson = msg.sender;
@@ -42,6 +43,7 @@ contract LastManStanding {
         string entityTeamName; // Change to bytes32
         bool isEntityNextRound; // true(After submission) : false(after newEntity || advanceUsersToNextRound)
         bool entityEntered;
+        uint entityAmount;
     }
     
     mapping(address => EntityStruct) public entityStructs;
@@ -63,7 +65,7 @@ contract LastManStanding {
         return entityList.length;
     }
     
-    function newEntry(string entityTeamName, uint entityTeamId) public returns(uint rowNumber) {
+    function newEntry(string entityTeamName, uint entityTeamId) payable public returns (uint rowNumber){
         entityAddress = msg.sender;
         if(isEntity(entityAddress)) throw;
         if(gameWeek != 1) throw;
@@ -71,6 +73,8 @@ contract LastManStanding {
         entityStructs[entityAddress].entityTeamName = entityTeamName;
         entityStructs[entityAddress].isEntityNextRound = false;
         entityStructs[entityAddress].entityEntered = true;
+        entityStructs[entityAddress].entityAmount = msg.value;
+        amount += entityStructs[entityAddress].entityAmount; 
         return entityList.push(entityAddress) - 1;
     }
     
@@ -116,8 +120,12 @@ contract LastManStanding {
         return true;
     }
     
-    function getUser(address _address) public constant returns(uint, string, bool, bool, uint) {
-        return (entityStructs[_address].entityTeamId,entityStructs[_address].entityTeamName,entityStructs[_address].isEntityNextRound,entityStructs[_address].entityEntered,entityStructs[_address].entityGameWeek);
+    function getUser(address _address) public constant returns(uint, string, bool, bool, uint, uint) {
+        return (entityStructs[_address].entityTeamId,entityStructs[_address].entityTeamName,entityStructs[_address].isEntityNextRound,entityStructs[_address].entityEntered,entityStructs[_address].entityGameWeek,entityStructs[_address].entityAmount);
+    }
+    
+    function getAmount() public constant returns (uint pot) {
+        return amount;
     }
 
 }

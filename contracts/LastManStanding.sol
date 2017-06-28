@@ -26,10 +26,13 @@ contract LastManStanding {
     address chairperson;
     uint gameWeek;
     uint amount;
+    address winner;
+    bool entrySuspended;
 
     function LastManStanding() {
         chairperson = msg.sender;
         gameWeek = 1;
+        entrySuspended = false;
     }
     
     modifier chairPerson() {
@@ -55,6 +58,7 @@ contract LastManStanding {
     event logString(string);
     event logUint(string, uint);
     event logBool(string, bool);
+    event logAddress(string, address);
 
     
     function isEntity(address entityAddress) public constant returns(bool isIndeed) {
@@ -66,6 +70,7 @@ contract LastManStanding {
     }
     
     function newEntry(string entityTeamName, uint entityTeamId) payable public returns (uint rowNumber){
+        if (entrySuspended) throw;
         entityAddress = msg.sender;
         if(isEntity(entityAddress)) throw;
         if(gameWeek != 1) throw;
@@ -77,6 +82,15 @@ contract LastManStanding {
         amount += entityStructs[entityAddress].entityAmount; 
         return entityList.push(entityAddress) - 1;
     }
+    
+    function suspendEntry(bool setEntryAccess) chairPerson public returns (bool _entrySuspended) {
+        entrySuspended = setEntryAccess;
+        return entrySuspended;
+    }
+    
+    // function getSuspendEntry() constant returns (bool currentSuspendStatus) {
+    //     return entrySuspended;
+    // }
     
     function advanceUsersToNextRound(uint[] _winners) chairPerson public returns(bool success) {
         winners = _winners;
@@ -98,6 +112,7 @@ contract LastManStanding {
     }
     
     function nextUserEntry(string entityTeamName, uint entityTeamId) public returns (bool nextEntryReceived) {
+        if (entrySuspended) throw;
         entityAddress = msg.sender;
         if(entityStructs[entityAddress].entityGameWeek != gameWeek && entityStructs[entityAddress].isEntityNextRound != true) throw;
         entityStructs[entityAddress].entityTeamId = entityTeamId;
@@ -109,7 +124,8 @@ contract LastManStanding {
     function checkForWinner(uint _usersLeft) constant returns (bool weHaveAWinner){
         if(_usersLeft > 1) throw;
         if(_usersLeft == 1) {
-            logUint("We have a winner", _usersLeft);
+            winner = entityList[0];
+            logAddress("We have a winner", winner);
         } else {
             logUint("DRAW", _usersLeft);
             for (uint8 i = 0; i < entityList.length; i++) { // Roll over addresses
@@ -126,6 +142,16 @@ contract LastManStanding {
     
     function getAmount() public constant returns (uint pot) {
         return amount;
+    }
+    
+    function retrievePot() public returns (uint totalPot){  
+        if (winner != msg.sender) throw;
+        winner.transfer(amount);
+        return amount;
+    }
+    
+    function winnerBalance() constant returns (uint winningPot) {
+        return winner.balance;
     }
 
 }

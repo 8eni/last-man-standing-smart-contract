@@ -23,11 +23,13 @@ pragma solidity ^0.4.11;
 
 contract LastManStanding {
     
+    // Chairperson variables
     address chairperson;
     uint gameWeek;
+    bool entrySuspended;
+    // Other
     uint amount;
     address winner;
-    bool entrySuspended;
 
     function LastManStanding() {
         chairperson = msg.sender;
@@ -55,70 +57,15 @@ contract LastManStanding {
     address entityAddress;
     uint usersLeft;
     
+    // Log events - All carry string before type e.g. LogBool("Entry suspended is set to ", true)
     event logString(string);
     event logUint(string, uint);
     event logBool(string, bool);
     event logAddress(string, address);
 
-    
-    function isEntity(address entityAddress) public constant returns(bool isIndeed) {
+    // Checkers
+    function checkIsEntity(address entityAddress) public constant returns(bool isIndeed) {
       return entityStructs[entityAddress].entityEntered;
-    }
-    
-    function getUserCount() public constant returns(uint entityCount) {
-        return entityList.length;
-    }
-    
-    function newEntry(string entityTeamName, uint entityTeamId) payable public returns (uint rowNumber){
-        if (entrySuspended) throw;
-        entityAddress = msg.sender;
-        if(isEntity(entityAddress)) throw;
-        if(gameWeek != 1) throw;
-        entityStructs[entityAddress].entityTeamId = entityTeamId;
-        entityStructs[entityAddress].entityTeamName = entityTeamName;
-        entityStructs[entityAddress].isEntityNextRound = false;
-        entityStructs[entityAddress].entityEntered = true;
-        entityStructs[entityAddress].entityAmount = msg.value;
-        amount += entityStructs[entityAddress].entityAmount; 
-        return entityList.push(entityAddress) - 1;
-    }
-    
-    function suspendEntry(bool setEntryAccess) chairPerson public returns (bool _entrySuspended) {
-        entrySuspended = setEntryAccess;
-        return entrySuspended;
-    }
-    
-    // function getSuspendEntry() constant returns (bool currentSuspendStatus) {
-    //     return entrySuspended;
-    // }
-    
-    function advanceUsersToNextRound(uint[] _winners) chairPerson public returns(bool success) {
-        winners = _winners;
-        gameWeek++;
-        usersLeft = 0;
-        for (uint8 i = 0; i < entityList.length; i++) { // Roll over addresses
-            for (uint8 j = 0; j < winners.length; j++) { // Roll over winner Ids
-                if (entityStructs[entityList[i]].entityTeamId == winners[j]) {
-                    entityStructs[entityList[i]].isEntityNextRound = true;
-                    entityStructs[entityList[i]].entityGameWeek = gameWeek;
-                    usersLeft++;
-                }
-            }
-            // logAdvance(entityStructs[entityList[i]].entityTeamName, entityStructs[entityList[i]].isEntityNextRound);
-        }
-        checkForWinner(usersLeft);
-        logUint("Gameweek set to ", gameWeek);
-        return true;
-    }
-    
-    function nextUserEntry(string entityTeamName, uint entityTeamId) public returns (bool nextEntryReceived) {
-        if (entrySuspended) throw;
-        entityAddress = msg.sender;
-        if(entityStructs[entityAddress].entityGameWeek != gameWeek && entityStructs[entityAddress].isEntityNextRound != true) throw;
-        entityStructs[entityAddress].entityTeamId = entityTeamId;
-        entityStructs[entityAddress].entityTeamName = entityTeamName;
-        entityStructs[entityAddress].isEntityNextRound = false;
-        return true;
     }
     
     function checkForWinner(uint _usersLeft) constant returns (bool weHaveAWinner){
@@ -136,22 +83,88 @@ contract LastManStanding {
         return true;
     }
     
-    function getUser(address _address) public constant returns(uint, string, bool, bool, uint, uint) {
-        return (entityStructs[_address].entityTeamId,entityStructs[_address].entityTeamName,entityStructs[_address].isEntityNextRound,entityStructs[_address].entityEntered,entityStructs[_address].entityGameWeek,entityStructs[_address].entityAmount);
+    
+    // Chairperson
+    function suspendUserEntry(bool setEntryAccess) chairPerson public returns (bool _entrySuspended) {
+        entrySuspended = setEntryAccess;
+        return entrySuspended;
     }
     
-    function getAmount() public constant returns (uint pot) {
-        return amount;
+    function advanceUsersToNextRound(uint[] _winners) chairPerson public returns(bool success) {
+        winners = _winners;
+        gameWeek++; // Increments game week by 1
+        entrySuspended = false; // Sets 'entry suspended' back to false
+        usersLeft = 0; 
+        for (uint8 i = 0; i < entityList.length; i++) { // Roll over addresses
+            for (uint8 j = 0; j < winners.length; j++) { // Roll over winner Ids
+                if (entityStructs[entityList[i]].entityTeamId == winners[j]) {
+                    entityStructs[entityList[i]].isEntityNextRound = true;
+                    entityStructs[entityList[i]].entityGameWeek = gameWeek;
+                    usersLeft++;
+                }
+            }
+            // logAdvance(entityStructs[entityList[i]].entityTeamName, entityStructs[entityList[i]].isEntityNextRound);
+        }
+        checkForWinner(usersLeft);
+        logUint("Gameweek set to ", gameWeek);
+        return true;
     }
     
-    function retrievePot() public returns (uint totalPot){  
+    
+    // User (new)
+    function newEntry(string entityTeamName, uint entityTeamId) payable public returns (uint rowNumber){
+        if(checkIsEntity(entityAddress) || gameWeek != 1 || entrySuspended) throw;
+        entityAddress = msg.sender;
+        entityStructs[entityAddress].entityTeamId = entityTeamId;
+        entityStructs[entityAddress].entityTeamName = entityTeamName;
+        entityStructs[entityAddress].isEntityNextRound = false;
+        entityStructs[entityAddress].entityEntered = true;
+        entityStructs[entityAddress].entityAmount = msg.value;
+        amount += entityStructs[entityAddress].entityAmount; 
+        return entityList.push(entityAddress) - 1;
+    }
+    
+    // User (existing)
+    function nextUserEntry(string entityTeamName, uint entityTeamId) public returns (bool nextEntryReceived) {
+        if (entrySuspended) throw;
+        entityAddress = msg.sender;
+        if(entityStructs[entityAddress].entityGameWeek != gameWeek && entityStructs[entityAddress].isEntityNextRound != true) throw;
+        entityStructs[entityAddress].entityTeamId = entityTeamId;
+        entityStructs[entityAddress].entityTeamName = entityTeamName;
+        entityStructs[entityAddress].isEntityNextRound = false;
+        return true;
+    }
+    
+    
+    // User (winner)
+    function collectPotWinnings() public returns (uint totalPot){   
         if (winner != msg.sender) throw;
         winner.transfer(amount);
         return amount;
     }
     
-    function winnerBalance() constant returns (uint winningPot) {
-        return winner.balance;
+    
+    // Standar Getters
+    function getUsersEnteredCount() public constant returns(uint entityCount) {
+        return entityList.length;
     }
+
+    function getUsersLeft() public constant returns(uint usersLeftInComp) {
+        return usersLeft;
+    }
+    
+    function getUserDetails(address _address) public constant returns(uint, string, bool, bool, uint, uint) {
+        return (entityStructs[_address].entityTeamId,entityStructs[_address].entityTeamName,entityStructs[_address].isEntityNextRound,entityStructs[_address].entityEntered,entityStructs[_address].entityGameWeek,entityStructs[_address].entityAmount);
+    }
+    
+    function getPotAmount() public constant returns (uint pot) {
+        return amount;
+    }
+    
+
+    
+    // function winnerBalance() constant returns (uint winningPot) {
+    //     return winner.balance;
+    // }
 
 }

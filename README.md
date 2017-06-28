@@ -109,7 +109,7 @@ How do I check how many users are left in comp
 How much is it to enter
 - The Chairperson decides on deployment
 
-What is someone doesn't pay up when they enter the comp
+What if someone doesn't pay up when they enter the comp
 - Not possible, if the users ETH value sent on newEntry does not match that of what
 the chairperson has set they will be thrown, also if they send to much they will also be thrown
 
@@ -119,8 +119,10 @@ the chairperson has set they will be thrown, also if they send to much they will
 - Update NewStruct method 
 
 
-**Improvements**
+**Improvements** priority 1:5 (high:low)
 
 - Chairperson submits winners, users confirm these these are correct by consensyus
 - clean up checkForWinner logic
 - Cut down gas TXN's costs, by using memory
+- Use proper eth/wei conversion
+- Log events e.g. teams picked by addresses

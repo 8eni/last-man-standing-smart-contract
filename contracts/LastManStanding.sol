@@ -27,14 +27,17 @@ contract LastManStanding {
     address chairperson;
     uint gameWeek;
     bool entrySuspended;
+    uint stakeToPlay;
     // Other
     uint amount;
     address winner;
 
-    function LastManStanding() {
+    function LastManStanding(uint _stakeToPlay) {
         chairperson = msg.sender;
         gameWeek = 1;
         entrySuspended = false;
+        stakeToPlay = _stakeToPlay*1000000000000000000;
+        
     }
     
     modifier chairPerson() {
@@ -73,6 +76,7 @@ contract LastManStanding {
         if(_usersLeft == 1) {
             winner = entityList[0];
             logAddress("We have a winner", winner);
+            return true;
         } else {
             logUint("DRAW", _usersLeft);
             for (uint8 i = 0; i < entityList.length; i++) { // Roll over addresses
@@ -80,7 +84,7 @@ contract LastManStanding {
                 entityStructs[entityList[i]].entityGameWeek = gameWeek;
             }
         }
-        return true;
+        return false;
     }
     
     
@@ -112,15 +116,16 @@ contract LastManStanding {
     
     
     // User (new)
-    function newEntry(string entityTeamName, uint entityTeamId) payable public returns (uint rowNumber){
-        if(checkIsEntity(entityAddress) || gameWeek != 1 || entrySuspended) throw;
+    function newEntry(string entityTeamName, uint entityTeamId) payable public returns (uint rowNumber) {
         entityAddress = msg.sender;
+        if(checkIsEntity(entityAddress) || gameWeek != 1 || entrySuspended || msg.value != stakeToPlay) throw;
         entityStructs[entityAddress].entityTeamId = entityTeamId;
         entityStructs[entityAddress].entityTeamName = entityTeamName;
         entityStructs[entityAddress].isEntityNextRound = false;
         entityStructs[entityAddress].entityEntered = true;
         entityStructs[entityAddress].entityAmount = msg.value;
-        amount += entityStructs[entityAddress].entityAmount; 
+        amount += entityStructs[entityAddress].entityAmount;
+        usersLeft = entityList.length;
         return entityList.push(entityAddress) - 1;
     }
     
@@ -144,7 +149,7 @@ contract LastManStanding {
     }
     
     
-    // Standar Getters
+    // Standard Getters
     function getUsersEnteredCount() public constant returns(uint entityCount) {
         return entityList.length;
     }

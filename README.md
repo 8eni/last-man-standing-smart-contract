@@ -92,7 +92,7 @@ What if user attemts to join comp after GW1
 
 I've won, How do I collect the pot
 - If you are the only remaining user, your address will be assigned to the winner variable,
-run retrievePot if winner matches sending address funds deposit to this address
+run retrievePot if (winner = sending address) funds will deposit to this address
 
 I picked the wrong team can I amend
 - No not currently
@@ -100,11 +100,18 @@ I picked the wrong team can I amend
 How do I check how much is in the pot
 - Users can run getPotAmount to return the amount in pot
 
-How do I check how many have entered
+How do I check how many users have entered
 - Users can run getUsersEnteredCount to return users entered
 
 How do I check how many users are left in comp
 - Users can run getUsersLeft to return users left
+
+How much is it to enter
+- The Chairperson decides on deployment
+
+What is someone doesn't pay up when they enter the comp
+- Not possible, if the users ETH value sent on newEntry does not match that of what
+the chairperson has set they will be thrown, also if they send to much they will also be thrown
 
 
 **Refactoring**
@@ -116,4 +123,4 @@ How do I check how many users are left in comp
 
 - Chairperson submits winners, users confirm these these are correct by consensyus
 - clean up checkForWinner logic
-- Cut down gas TXN's costs, use memory
+- Cut down gas TXN's costs, by using memory

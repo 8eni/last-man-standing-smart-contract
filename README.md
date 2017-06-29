@@ -55,9 +55,9 @@
 **Last Man Standing (LMS) laymens**
 
 Users can enter comp once only on Game Week (GW) 1 
-- User 1 picks 'Arsenal' to win for GW1
-- User 2 picks 'Burnley' to win for GW1
-- User 3 picks 'Chelsea' to win for GW1
+- User 1 picks 'Arsenal' with specified wei amount to win for GW1 
+- User 2 picks 'Burnley' with specified wei amount to win for GW1
+- User 3 picks 'Chelsea' with specified wei amount to win for GW1
 
 Chairperson (Person who deployed contract) adds winners from GW1
 - Chairperson adds winning teams, only 2 users who had winners they were 'Burnley' or 'Chelsea'

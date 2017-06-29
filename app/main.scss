@@ -1,6 +1,14 @@
 /*
  * Base structure
  */
+.row{
+  border: solid 3px #eee;
+  padding: 10px;
+}
+.btn-choose{
+  width: 100%;
+  margin-bottom: 15px;
+}
 .avatar {
     overflow: hidden;
     width: 24px;

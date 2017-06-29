@@ -1,155 +1,115 @@
-<!-- 
-
-<h1>{{vm.title}}</h1>
-
-<h3>Hello</h3>
-<h4>Balance for <span ng-bind="vm.address"></span>: {{vm.balance}}</h4>
-
-<h3>text {{vm.addressCheck}}</h3>
-<input type="text" name="balance" ng-model="vm.addressCheck">
-<button class="btn btn-primary" ng-click='vm.getBalance(vm.addressCheck)'>GET BALANCE</button>
-
-
-<button ng-click='vm.sendCoin()'>SEND COIN</button>
-
-
- -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#"><img src="../img/logo.png"></a>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-3 text-center">
+          <h3>
+            User Entires
+            <div>
+              20
+            </div>
+          </h3>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <!-- <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Help</a></li> -->
-          </ul>
-          <form class="navbar-form navbar-right">
-            <select class="form-control" ng-model="vm.selectedAddress" ng-options="x for x in vm.addresses">
-            </select>
-          </form>
+        <div class="col-md-3 text-center">
+          <h3>
+            Users Left
+            <div>
+              12
+            </div>
+          </h3>
+        </div>
+        <div class="col-md-3 text-center">
+          <h3>
+            Pot
+            <div>
+              100
+            </div>
+          </h3>
+        </div>
+        <div class="col-md-3 text-center">
+          <h3>
+            GW
+            <div>
+              1
+            </div>
+          </h3>
         </div>
       </div>
-    </nav>
-
-    <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a ui-sref="crc">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-          </ul>
+        <div class="col-md-3">
+          <h3>
+            User Public Key
+          </h3>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Security Freeze -  
-          <b ng-if="vm.creditReportState != 'true'">Unactive</b>
-          <b ng-if="vm.creditReportState == 'true'">Active</b>
-          <span class="state {{vm.creditReportState}}">
-          	<i ng-if="vm.creditReportState != 'true'" class="fa fa-unlock-alt" aria-hidden="true"></i>
-            <i ng-if="vm.creditReportState == 'true'" class="fa fa-lock" aria-hidden="true"></i>
-          </span>
-          </h1>
+        <div class="col-md-9">
+          <h3>
+            0xcf6c729305cf0072caf1332b46d
+          </h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <h3>
+            User Entry
+          </h3>
+        </div>
+        <div class="col-md-3">
+          <h3 ng-bind="vm.teamSelection">
+          </h3>
+        </div>
+        <div class="col-md-3">
+          <h3>
+            Game Week 1
+          </h3>
+        </div>
+        <div class="col-md-3">
+          <h3>
+            Stake 300
+          </h3>
+        </div>
+      </div>
+      <h3 class="text-center">
+        Choose your team for Game Week X
+      </h3>
+      <pre>
+        {{vm.teams}}
+      </pre>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="btn-group-lg">
+             
+            <button 
+              ng-repeat="team in vm.teamsA"
+              ng-click="vm.makeSelection(team)"
+              class="btn btn-default btn-choose" 
+              type="button"
+              ng-bind="team.name">
+            </button>
 
-          <!-- <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-          </div> -->
-
-          
-          <div class="table-responsive col-md-7">
-            <h2 class="sub-header">Ledger</h2>
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Block</th>
-                  <!-- <th>TXN</th> -->
-                  <th>Address</th>
-                  <th>Freeze</th>
-                  <th>Timestamp</th>
-                  <th>Duration</th>
-                  <th>Creditor</th>
-                  <th>Message</th>
-                  <!-- <th>Header</th> -->
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="txn in vm.transactions | reverse">
-                  <td><b>#</b>{{txn.blockNumber}}</td>
-                  <!-- <td><span class="hash" data-toggle="tooltip" title="{{txn.hash}}">{{txn.hash}}</span></td> -->
-                  <td><span class="hash">{{txn.from}}</span></td>
-                  <td>{{txn.bool}}</td>
-                  <td>{{txn.timestamp}}</td>
-                  <td>{{txn.duration}}</td>
-                  <td>{{txn.creditor}}</td>
-                  <td>{{txn.message}}</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
+        </div>
+        <div class="col-md-6">
+          <div class="btn-group-lg">
+             
+            <button 
+              ng-repeat="team in vm.teamsB" 
+              ng-click="vm.makeSelection(team)"
+              class="btn btn-default btn-choose" 
+              type="button"
+              ng-bind="team.name">
+            </button>
 
-          
-          <div class="table-responsive col-md-5">
-          <h2 class="sub-header">State submission</h2>
-            <form>
-        <div class="form-group" ng-if="vm.creditReportState == 'true'">
-          <label for="time">Security freeze duration</label>
-          <select class="form-control" ng-model="vm.selectedDay" ng-options="x for x in vm.days">
-          </select>
-        </div>
-			  <div class="form-group">
-			    <label for="recipient">Creditor</label>
-			    <input ng-model="vm.creditor" type="text" class="form-control" id="recipient" placeholder="Creditor">
-			  </div>
-        <div class="form-group">
-          <label for="reason">Reason</label>
-          <input ng-model="vm.reason" type="text" class="form-control" id="reason" placeholder="Reason for release/freeze">
-        </div>
-			  <button ng-if="vm.creditReportState != 'true'" ng-click="vm.freeze()" class="btn btn-primary">Lock</button>
-			  <button ng-if="vm.creditReportState == 'true'" ng-click="vm.unFreeze()" class="btn btn-default">Unlock</button>
-			</form>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+           
+          <button type="button" class="btn btn-primary btn-lg btn-block">
+            CONFIRM
+          </button>
         </div>
       </div>
     </div>
-
- 
+  </div>
+</div>

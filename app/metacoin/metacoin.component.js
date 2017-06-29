@@ -11,6 +11,37 @@ let metacoinComponent = {
 		
 		const vm = this;
 		vm.title = metacoinService.title();
+
+		vm.teamsA = [
+			{'id': 1 ,'name':'AFC Bournemouth'},
+			{'id': 2 ,'name':'Arsenal'},
+			{'id': 3 ,'name':'Brighton & Hove Albion'},
+			{'id': 4 ,'name':'Burnley'},
+			{'id': 5 ,'name':'Chelsea'},
+			{'id': 6 ,'name':'Crystal Palace'},
+			{'id': 7 ,'name':'Everton'},
+			{'id': 8 ,'name':'Huddersfield Town'},
+			{'id': 9 ,'name':'Leicester City'},
+			{'id': 10,'name':'Liverpool'}
+		]
+		vm.teamsB = [
+			{'id': 11,'name':'Manchester City'},
+			{'id': 12,'name':'Manchester United'},
+			{'id': 13,'name':'Newcastle United'},
+			{'id': 14,'name':'Southampton'},
+			{'id': 15,'name':'Stoke City'},
+			{'id': 16,'name':'Swansea City'},
+			{'id': 17,'name':'Tottenham Hotspur'},
+			{'id': 18,'name':'Watford'},
+			{'id': 19,'name':'West Bromwich Albion'},
+			{'id': 20,'name':'West Ham United'}
+		]
+
+		vm.makeSelection = (team) => {
+			vm.teamSelection = team.name;
+			vm.idSelection = team.id;
+		}
+
 		// Intiate Web3 instance
 		var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 		// Contract details

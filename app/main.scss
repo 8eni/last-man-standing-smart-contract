@@ -1,6 +1,17 @@
 /*
  * Base structure
  */
+body{
+  background: #38003C;
+}
+.container{
+  background: white;
+}
+.btn-group-lg button{
+  background: #00FF87;
+  font-weight: bold;
+  color: #38003C;
+}
 .row{
   border: solid 3px #eee;
   padding: 10px;

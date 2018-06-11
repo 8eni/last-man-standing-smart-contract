@@ -1,4 +1,4 @@
-# MetaCoin Smart Contract
+# Last Man Standing
 **AngularJs** front-end for **truffle** and **testrpc**
 
 **Prerequisites** global
